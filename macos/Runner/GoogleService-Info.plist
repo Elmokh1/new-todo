@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>974355530106-8e9e9dfm6i62rtt5ctv4vlcrbc5hltqt.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.974355530106-8e9e9dfm6i62rtt5ctv4vlcrbc5hltqt</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAqK8LrKE_tE7Mcf0aLQ_00GfaBILtqkk8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>974355530106</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.newTodo.RunnerTests</string>
+	<key>PROJECT_ID</key>
+	<string>todo-agri-hawk</string>
+	<key>STORAGE_BUCKET</key>
+	<string>todo-agri-hawk.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:974355530106:ios:f4f5a13776cef4a40e96c3</string>
+</dict>
+</plist>

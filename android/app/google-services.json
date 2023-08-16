@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "974355530106",
+    "project_id": "todo-agri-hawk",
+    "storage_bucket": "todo-agri-hawk.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:974355530106:android:2c668ead500ed4190e96c3",
+        "android_client_info": {
+          "package_name": "com.example.new_todo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "974355530106-hkerqgk1681p4f3g2k1dlon08p3ibrb0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIR92FscraE7Qxz9c4LlHflm2Au9aBEp8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "974355530106-hkerqgk1681p4f3g2k1dlon08p3ibrb0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "974355530106-8e9e9dfm6i62rtt5ctv4vlcrbc5hltqt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.newTodo.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:974355530106:android:338f15f4e948c2530e96c3",
+        "android_client_info": {
+          "package_name": "com.example.todo_c8_online"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "974355530106-hkerqgk1681p4f3g2k1dlon08p3ibrb0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIR92FscraE7Qxz9c4LlHflm2Au9aBEp8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "974355530106-hkerqgk1681p4f3g2k1dlon08p3ibrb0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "974355530106-8e9e9dfm6i62rtt5ctv4vlcrbc5hltqt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.newTodo.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
