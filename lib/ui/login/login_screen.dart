@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:new_todo/dialog_utils.dart';
 import 'package:new_todo/ui/componant/custom_text_field.dart';
+import 'package:new_todo/ui/database/my_database.dart';
 import 'package:new_todo/ui/register/register_screen.dart';
 
 import '../../validation_utils.dart';
+import '../HomeScreen/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String routeName = "Login";
@@ -95,9 +97,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  TextButton(onPressed: () {
-                    Navigator.pushReplacementNamed(context, RegisterScreen.routeName);
-                  }, child: const Text("Don`t Have Account"))
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(
+                            context, RegisterScreen.routeName);
+                      },
+                      child: const Text("Don`t Have Account"))
                 ],
               ),
             ),
@@ -111,40 +116,43 @@ class _LoginScreenState extends State<LoginScreen> {
 
   FirebaseAuth authService = FirebaseAuth.instance;
 
-  void Login()async{// async - await
-    if(formkey.currentState?.validate()==false){
+  void Login() async {
+    // async - await
+    if (formkey.currentState?.validate() == false) {
       return;
     }
 
-    DialogUtils.showLoadingDialog(context,'Loading...');
-    try{
-      var result = await authService.signInWithEmailAndPassword(email: emailController.text,
-          password: passwordController.text);
+    DialogUtils.showLoadingDialog(context, 'Loading...');
+    try {
+      var result = await authService.signInWithEmailAndPassword(
+          email: emailController.text, password: passwordController.text);
+      var user = await MyDataBase.readUser(result.user?.uid ?? "");
+      if (user ==null){
+        DialogUtils.showMessage(context, "Error to ind user in db", postActionName: 'ok');
+        return;
+      }
       DialogUtils.hideDialog(context);
-      DialogUtils.showMessage(context, 'user logged in successfully',
-          postActionName: 'ok',
-          posAction: (){
-            // Navigator.pushReplacementNamed(context,HomeScreen.routeName);
-          },dismissible: false
+      DialogUtils.showMessage(
+        context,
+        "User Logged in  Successfully",
+        postActionName: "ok",
+        posAction: () {
+          Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+        },
+        dismissible: false,
       );
 
-    }on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (e) {
       DialogUtils.hideDialog(context);
       String errorMessage = 'wrong email or password';
-      DialogUtils.showMessage(context, errorMessage,
-          postActionName: 'ok');
-
+      DialogUtils.showMessage(context, errorMessage, postActionName: 'ok');
     } catch (e) {
       DialogUtils.hideDialog(context);
       String errorMessage = 'Something went wrong';
       DialogUtils.showMessage(context, errorMessage,
-          postActionName: 'cancel',
-          negActionName: 'Try Again',
-          negAction: (){
-            Login();
-          }
-      );
-
+          postActionName: 'cancel', negActionName: 'Try Again', negAction: () {
+        Login();
+      });
     }
   }
 }

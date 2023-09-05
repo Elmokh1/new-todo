@@ -2,9 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:new_todo/dialog_utils.dart';
+import 'package:new_todo/ui/HomeScreen/home_screen.dart';
 import 'package:new_todo/ui/componant/custom_text_field.dart';
+import 'package:new_todo/ui/database/model/user_model.dart' as MyUser;
+import 'package:new_todo/ui/database/my_database.dart';
 import 'package:new_todo/ui/login/login_screen.dart';
-
 import '../../validation_utils.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -17,9 +19,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   var formkey = GlobalKey<FormState>();
   var nameController = TextEditingController(text: "ahmedMokhtar");
-
   var emailController = TextEditingController(text: "elmokh843@gmail.com");
-
   var passwordController = TextEditingController(text: "123456");
   var passwordConfirmationController = TextEditingController(text: "123456");
 
@@ -107,8 +107,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 30.0,left: 30,right: 30,bottom: 10),
-
+                    padding: const EdgeInsets.only(
+                        top: 30.0, left: 30, right: 30, bottom: 10),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 12),
@@ -122,9 +122,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                   ),
-                  TextButton(onPressed: () {
-                    Navigator.pushReplacementNamed(context, LoginScreen.routeName);
-                  }, child: const Text("Already Have Account")),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(
+                            context, LoginScreen.routeName);
+                      },
+                      child: const Text("Already Have Account")),
                 ],
               ),
             ),
@@ -148,11 +151,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
     try {
       var result = await authService.createUserWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
+      var myUser = MyUser.User(
+        name: nameController.text,
+        email: emailController.text,
+        id: result.user?.uid,
+      );
+      await MyDataBase.addUser(myUser);
       DialogUtils.hideDialog(context);
-      DialogUtils.showMessage(context, 'user registered successfully',
-          postActionName: 'ok', posAction: () {
-        Navigator.pushReplacementNamed(context, LoginScreen.routeName);
-      }, dismissible: false);
+      DialogUtils.showMessage(
+        context,
+        "User Register Successfully",
+        postActionName: "ok",
+        posAction: () {
+          Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+        },
+        dismissible: false,
+      );
+
+      // DialogUtils.hideDialog(context);
+      // DialogUtils.showMessage(context, 'user registered successfully',
+      //     postActionName: 'ok', posAction: () {
+      //   Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+      // }, dismissible: false);
     } on FirebaseAuthException catch (e) {
       DialogUtils.hideDialog(context);
       String errorMessage = 'Something went wrong';
