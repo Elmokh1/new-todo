@@ -17,7 +17,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -42,7 +41,7 @@ class MyApp extends StatelessWidget {
               elevation: 0
           )
       ),
-      initialRoute: RegisterScreen.routeName,
+      initialRoute: HomeScreen.routeName,
       routes: {
         RegisterScreen.routeName :(context) =>RegisterScreen(),
         LoginScreen.routeName :(context) =>LoginScreen(),

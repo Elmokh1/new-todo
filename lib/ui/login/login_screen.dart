@@ -17,7 +17,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  var formkey = GlobalKey<FormState>();
+  var formKey = GlobalKey<FormState>();
   var nameController = TextEditingController(text: "ahmedMokhtar");
 
   var emailController = TextEditingController(text: "elmokh843@gmail.com");
@@ -36,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       child: Scaffold(
           body: Form(
-            key: formkey,
+            key: formKey,
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -118,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void Login() async {
     // async - await
-    if (formkey.currentState?.validate() == false) {
+    if (formKey.currentState?.validate() == false) {
       return;
     }
 
