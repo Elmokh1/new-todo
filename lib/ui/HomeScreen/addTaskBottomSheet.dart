@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:new_todo/MyDateUtils.dart';
+import 'package:new_todo/dialog_utils.dart';
+import 'package:new_todo/provider/Auth_provider.dart';
 import 'package:new_todo/ui/componant/custom_text_field.dart';
+import 'package:provider/provider.dart';
+
+
+import '../../database/model/task_model.dart';
+import '../../database/my_database.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
   @override
@@ -8,7 +15,7 @@ class AddTaskBottomSheet extends StatefulWidget {
 }
 
 class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
-  TextEditingController taskController = TextEditingController();
+  TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   var formKey = GlobalKey<FormState>();
 
@@ -29,7 +36,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             ),
             CustomTextFormField(
               Label: 'Enter Your Task ',
-              controller: taskController,
+              controller: titleController,
               validator: (text) {
                 if (text == null || text.trim().isEmpty) {
                   return 'please enter task description';
@@ -96,14 +103,24 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
     );
   }
 
-  void addTask() {
+  void addTask() async{
+
     if (formKey.currentState?.validate() == false) {
       return;
     }
+    Task task = Task(
+      dateTime: selectedDate,
+      desc: descriptionController.text,
+      title: titleController.text,
+    );
+    AuthProvider authProvider = Provider.of<AuthProvider>(context,listen: false);
+    await MyDataBase.addTask(authProvider.currentUser!.id ??"", task);
+    DialogUtils.hideDialog(context);
+    DialogUtils.showMessage(context, "Task Added Successfully");
+    DialogUtils.hideDialog(context);
+
   }
-
   var selectedDate = DateTime.now();
-
   void showTaskDatePicker() async {
     var date = await showDatePicker(
       context: context,

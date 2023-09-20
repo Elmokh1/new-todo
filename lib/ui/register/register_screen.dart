@@ -2,11 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:new_todo/dialog_utils.dart';
+import 'package:new_todo/provider/Auth_provider.dart';
 import 'package:new_todo/ui/HomeScreen/home_screen.dart';
 import 'package:new_todo/ui/componant/custom_text_field.dart';
-import 'package:new_todo/ui/database/model/user_model.dart' as MyUser;
-import 'package:new_todo/ui/database/my_database.dart';
+import 'package:new_todo/database/model/user_model.dart' as MyUser;
+import 'package:new_todo/database/my_database.dart';
 import 'package:new_todo/ui/login/login_screen.dart';
+import 'package:provider/provider.dart';
 import '../../validation_utils.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -157,11 +159,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
         id: result.user?.uid,
       );
       await MyDataBase.addUser(myUser);
+      var aurthprovider = Provider.of<AuthProvider>(context,listen: false);
+      aurthprovider.updateUSer(myUser);
       DialogUtils.hideDialog(context);
       DialogUtils.showMessage(
         context,
         "User Register Successfully",
-        postActionName: "ok",
+        posActionName: "ok",
         posAction: () {
           Navigator.pushReplacementNamed(context, HomeScreen.routeName);
         },
@@ -181,12 +185,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
       } else if (e.code == 'email-already-in-use') {
         errorMessage = 'The account already exists for that email.';
       }
-      DialogUtils.showMessage(context, errorMessage, postActionName: 'ok');
+      DialogUtils.showMessage(context, errorMessage, posActionName: 'ok');
     } catch (e) {
       DialogUtils.hideDialog(context);
       String errorMessage = 'Something went wrong';
       DialogUtils.showMessage(context, errorMessage,
-          postActionName: 'cancel', negActionName: 'Try Again', negAction: () {
+          posActionName: 'cancel', negActionName: 'Try Again', negAction: () {
         register();
       });
     }

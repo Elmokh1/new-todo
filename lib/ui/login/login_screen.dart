@@ -2,10 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:new_todo/dialog_utils.dart';
+import 'package:new_todo/provider/Auth_provider.dart';
 import 'package:new_todo/ui/componant/custom_text_field.dart';
-import 'package:new_todo/ui/database/my_database.dart';
 import 'package:new_todo/ui/register/register_screen.dart';
-
+import 'package:provider/provider.dart';
+import '../../database/my_database.dart';
 import '../../validation_utils.dart';
 import '../HomeScreen/home_screen.dart';
 
@@ -20,7 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   var formKey = GlobalKey<FormState>();
   var nameController = TextEditingController(text: "ahmedMokhtar");
 
-  var emailController = TextEditingController(text: "elmokh843@gmail.com");
+  var emailController = TextEditingController(text: "elmokh8433@gmail.com");
 
   var passwordController = TextEditingController(text: "123456");
   var passwordConfirmationController = TextEditingController(text: "123456");
@@ -128,29 +129,31 @@ class _LoginScreenState extends State<LoginScreen> {
           email: emailController.text, password: passwordController.text);
       var user = await MyDataBase.readUser(result.user?.uid ?? "");
       if (user ==null){
-        DialogUtils.showMessage(context, "Error to ind user in db", postActionName: 'ok');
+        DialogUtils.showMessage(context, "Error to ind user in db", posActionName: 'ok');
         return;
       }
       DialogUtils.hideDialog(context);
       DialogUtils.showMessage(
         context,
         "User Logged in  Successfully",
-        postActionName: "ok",
+        posActionName: "ok",
         posAction: () {
           Navigator.pushReplacementNamed(context, HomeScreen.routeName);
         },
         dismissible: false,
       );
+      var authProvider = Provider.of<AuthProvider>(context,listen: false);
+      authProvider.updateUSer(user);
 
     } on FirebaseAuthException catch (e) {
       DialogUtils.hideDialog(context);
       String errorMessage = 'wrong email or password';
-      DialogUtils.showMessage(context, errorMessage, postActionName: 'ok');
+      DialogUtils.showMessage(context, errorMessage, posActionName: 'ok');
     } catch (e) {
       DialogUtils.hideDialog(context);
       String errorMessage = 'Something went wrong';
       DialogUtils.showMessage(context, errorMessage,
-          postActionName: 'cancel', negActionName: 'Try Again', negAction: () {
+          posActionName: 'cancel', negActionName: 'Try Again', negAction: () {
         Login();
       });
     }

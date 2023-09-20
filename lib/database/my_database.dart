@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:new_todo/ui/database/model/task_model.dart';
-import 'package:new_todo/ui/database/model/user_model.dart';
+
+
+import 'model/task_model.dart';
+import 'model/user_model.dart';
 
 class MyDataBase {
   static CollectionReference<User> getUserCollection() {
@@ -34,4 +36,11 @@ class MyDataBase {
     var docSnapShot = await collection.doc(id).get();
     return docSnapShot.data();
   }
+  static Future<void> addTask (String uid , Task task){
+    var newTask = getTaskCollection(uid).doc();
+    task.id = newTask.id;
+    return newTask.set(task);
+  }
+
+
 }
