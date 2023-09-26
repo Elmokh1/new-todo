@@ -20,79 +20,87 @@ class _TaskItemState extends State<TaskItem> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(14.0),
-        color: Colors.red,
-      ),
-      child: Slidable(
-        startActionPane: ActionPane(
-          motion: const DrawerMotion(),
-          children: [
-            SlidableAction(
-              onPressed: (context) {
-                deleteTask();
-              },
-              icon: Icons.delete,
-              label: "Delete",
-              backgroundColor: Colors.red,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(14.0),
-                bottomLeft: Radius.circular(14.0),
-              ),
-            ),
-          ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14.0),
+          color: Colors.red,
         ),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14.0),
-            color: Colors.white,
-          ),
-          child: Row(
+        child: Slidable(
+          startActionPane: ActionPane(
+            motion: const DrawerMotion(),
             children: [
-              Container(
-                margin: const EdgeInsets.all(20),
-                height: 80,
-                width: 3,
-                color: theme.primaryColor,
-              ),
-              Expanded(
-                  child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "${widget.task.title}",
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: theme.primaryColor,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  Text(
-                    "${widget.task.desc}",
-                    style: const TextStyle(
-                      fontSize: 10,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w300,
-                    ),
-                  ),
-                ],
-              )),
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0, vertical: 7.0),
-                  decoration: BoxDecoration(
-                      color: theme.primaryColor,
-                      borderRadius: BorderRadius.circular(12.0)),
-                  child: Image.asset("assets/images/Ic_check.png"),
+              SlidableAction(
+                onPressed: (context) {
+                  deleteTask();
+                },
+                icon: Icons.delete,
+                label: "Delete",
+                backgroundColor: Colors.red,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(14.0),
+                  bottomLeft: Radius.circular(14.0),
                 ),
               ),
             ],
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(14.0),
+              color: Colors.white,
+            ),
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: InkWell(
+                    onTap: () {
+                      print("10");
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 7.0),
+                      decoration: BoxDecoration(
+                          color: theme.primaryColor,
+                          borderRadius: BorderRadius.circular(12.0)),
+                      child: Image.asset("assets/images/Ic_check.png"),
+                    ),
+                  ),
+                ),
+                Expanded(
+                    child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      "${widget.task.title}",
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: theme.primaryColor,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    Text(
+                      "${widget.task.desc}",
+                      style: const TextStyle(
+                        fontSize: 10,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                  ],
+                )),
+                Container(
+                  margin: const EdgeInsets.all(20),
+                  height: 80,
+                  width: 3,
+                  color: theme.primaryColor,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -106,15 +114,14 @@ class _TaskItemState extends State<TaskItem> {
       posActionName: "yes",
       negActionName: "Cancel",
       posAction: deletTaskFromDataBase,
-
-
-
     );
   }
-  void deletTaskFromDataBase()async{
-    var authProvider = Provider.of<AuthProvider>(context,listen: false);
-    try{
-      await MyDataBase.deleteTask(authProvider.currentUser?.id ?? "", widget.task.id ?? "");
+
+  void deletTaskFromDataBase() async {
+    var authProvider = Provider.of<AuthProvider>(context, listen: false);
+    try {
+      await MyDataBase.deleteTask(
+          authProvider.currentUser?.id ?? "", widget.task.id ?? "");
       Fluttertoast.showToast(
           msg: "Task deleted Successfully",
           toastLength: Toast.LENGTH_SHORT,
@@ -122,11 +129,9 @@ class _TaskItemState extends State<TaskItem> {
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.red,
           textColor: Colors.white,
-          fontSize: 16.0
-      );
-    } catch (e){
+          fontSize: 16.0);
+    } catch (e) {
       DialogUtils.showMessage(context, "Somthing went wrong");
     }
-
   }
 }

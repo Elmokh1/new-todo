@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:new_todo/provider/Auth_provider.dart';
 import 'package:new_todo/ui/HomeScreen/home_screen.dart';
+import 'package:new_todo/ui/Splash/splash_screen.dart';
 import 'package:new_todo/ui/login/login_screen.dart';
 import 'package:new_todo/ui/register/register_screen.dart';
 import 'package:provider/provider.dart';
@@ -42,11 +43,12 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: const Color(0xFFDFECDB),
           bottomNavigationBarTheme: const BottomNavigationBarThemeData(
               backgroundColor: Colors.transparent, elevation: 0)),
-      initialRoute: RegisterScreen.routeName,
+      initialRoute: Splash.routename,
       routes: {
         RegisterScreen.routeName: (context) => RegisterScreen(),
         LoginScreen.routeName: (context) => LoginScreen(),
         HomeScreen.routeName: (context) => HomeScreen(),
+        Splash.routename: (context) => Splash(),
       },
     );
   }

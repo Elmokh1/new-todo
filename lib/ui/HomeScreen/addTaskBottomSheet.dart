@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:new_todo/MyDateUtils.dart';
 import 'package:new_todo/dialog_utils.dart';
 import 'package:new_todo/provider/Auth_provider.dart';
@@ -35,7 +36,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
               ),
             ),
             CustomTextFormField(
-              Label: 'Enter Your Task ',
+              Label: 'Client name  ',
               controller: titleController,
               validator: (text) {
                 if (text == null || text.trim().isEmpty) {
@@ -45,7 +46,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             ),
             CustomTextFormField(
               lines: 5,
-              Label: 'Enter Your Description ',
+              Label: 'Notes ',
               controller: descriptionController,
               validator: (text) {
                 if (text == null || text.trim().isEmpty) {
@@ -93,7 +94,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                     addTask();
                   },
                   child: const Text(
-                    'Add Task',
+                    'Add ',
                     style: TextStyle(fontSize: 18),
                   )),
             )
@@ -116,8 +117,15 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
     AuthProvider authProvider = Provider.of<AuthProvider>(context,listen: false);
     await MyDataBase.addTask(authProvider.currentUser!.id ??"", task);
     DialogUtils.hideDialog(context);
-    DialogUtils.showMessage(context, "Task Added Successfully");
-    DialogUtils.hideDialog(context);
+    Fluttertoast.showToast(
+        msg: "Task Add Successfully",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
 
   }
   var selectedDate = DateTime.now();

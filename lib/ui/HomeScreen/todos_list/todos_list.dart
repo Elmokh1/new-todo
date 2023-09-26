@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:new_todo/MyDateUtils.dart';
 import 'package:new_todo/database/model/task_model.dart';
 import 'package:new_todo/database/my_database.dart';
@@ -53,7 +54,9 @@ class _TodoListState extends State<TodoList> {
                   snapshot.data?.docs.map((doc) => doc.data()).toList();
               if (taskList?.isEmpty == true) {
                 return Center(
-                  child: Text("you don`t have tasks yet"),
+                  child: Text("!! فاضي ",style: GoogleFonts.abel(
+                    fontSize: 30,
+                  ),),
                 );
               }
               return ListView.builder(
