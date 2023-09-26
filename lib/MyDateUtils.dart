@@ -7,5 +7,13 @@ class MyDateUtils{
     return formater.format(dateTime);
   }
 
+  static DateTime dateOnly(DateTime input){
+    return DateTime(
+      input.year,
+      input.month,
+      input.day,
+    );
+  }
+
 
 }
