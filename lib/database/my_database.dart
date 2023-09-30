@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 import 'model/task_model.dart';
 import 'model/user_model.dart';
 
@@ -36,23 +35,33 @@ class MyDataBase {
     var docSnapShot = await collection.doc(id).get();
     return docSnapShot.data();
   }
-  static Future<void> addTask (String uid , Task task){
+
+  static Future<void> addTask(String uid, Task task) {
     var newTask = getTaskCollection(uid).doc();
     task.id = newTask.id;
     return newTask.set(task);
   }
 
-
   static Future<QuerySnapshot<Task>> getTasks(String uId) {
     return getTaskCollection(uId).get();
   }
 
-
-  static Stream<QuerySnapshot<Task>> getTasksRealTimeUpdate(String uId,int date) {
-    return getTaskCollection(uId).where("dateTime",isEqualTo: date).snapshots();
+  static Stream<QuerySnapshot<Task>> getTasksRealTimeUpdate(
+      String uId, int date) {
+    return getTaskCollection(uId)
+        .where("dateTime", isEqualTo: date)
+        .snapshots();
   }
-  static Future<void>deleteTask(String uId, String taskId){
+
+  static Future<void> deleteTask(String uId, String taskId) {
     return getTaskCollection(uId).doc(taskId).delete();
   }
+
+  static Future<void> editTask(String uId, String taskId, bool isDone) {
+    return getTaskCollection(uId).doc(taskId).update({
+      "isDone": isDone,
+    });
+  }
+
 
 }

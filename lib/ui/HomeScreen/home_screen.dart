@@ -44,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
             BottomNavigationBarItem(
                 icon: Icon(Icons.list, size: 32,), label: ''),
             BottomNavigationBarItem(
-                icon: Icon(Icons.settings, size: 32,), label: ''),
+                icon: Icon(Icons.check_circle, size: 32,), label: ''),
           ],
         ),
       ),
@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
   var tabs = [
     TodoList(),
-    Settings(),
+    Done(),
 
   ];
 }

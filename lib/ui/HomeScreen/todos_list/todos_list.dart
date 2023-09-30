@@ -23,6 +23,13 @@ class _TodoListState extends State<TodoList> {
     var authProvider = Provider.of<AuthProvider>(context);
     return Column(
       children: [
+        Text(
+          "Welcome Back ${authProvider.currentUser!.name!.toUpperCase()}",
+          style: GoogleFonts.poppins(
+            fontSize: 15,
+            color: Colors.blue,
+          ),
+        ),
         TableCalendar(
           firstDay: DateTime.now().subtract(Duration(days: 365)),
           lastDay: DateTime.now().add(Duration(days: 365)),
@@ -54,14 +61,24 @@ class _TodoListState extends State<TodoList> {
                   snapshot.data?.docs.map((doc) => doc.data()).toList();
               if (taskList?.isEmpty == true) {
                 return Center(
-                  child: Text("!! فاضي ",style: GoogleFonts.abel(
-                    fontSize: 30,
-                  ),),
+                  child: Text(
+                    "!! فاضي ",
+                    style: GoogleFonts.abel(
+                      fontSize: 30,
+                    ),
+                  ),
                 );
               }
+
               return ListView.builder(
-                itemBuilder: (context, index) =>
-                    TaskItem(task: taskList![index]),
+                itemBuilder: (context, index) {
+                  final task = taskList![index];
+                  if (task.isDone ==true) {
+                    return SizedBox.shrink(); // إخفاء العنصر إذا كانت isDone = true
+                  } else {
+                    return TaskItem(task: task);
+                  }
+                },
                 itemCount: taskList?.length ?? 0,
               );
             },
