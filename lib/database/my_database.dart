@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:new_todo/database/model/report_model.dart';
 
 import 'model/task_model.dart';
 import 'model/user_model.dart';
+
 
 class MyDataBase {
   static CollectionReference<User> getUserCollection() {
@@ -18,12 +20,24 @@ class MyDataBase {
     return getUserCollection()
         .doc(uid)
         .collection(Task.collectionName)
-        .withConverter(
+        .withConverter<Task>(
           fromFirestore: (snapshot, options) =>
               Task.fromFireStore(snapshot.data()),
           toFirestore: (task, options) => task.toFireStore(),
         );
   }
+
+  static CollectionReference<Report> getReportCollection(String uid, String tId) {
+    return getTaskCollection(uid)
+        .doc(tId)
+        .collection(Report.collectionName)
+        .withConverter<Report>(
+      fromFirestore: (snapshot, options) =>
+          Report.fromFireStore(snapshot.data()),
+      toFirestore: (report, options) => report.toFireStore(),
+    );
+  }
+
 
   static Future<void> addUser(User user) {
     var collection = getUserCollection();
@@ -42,15 +56,26 @@ class MyDataBase {
     return newTask.set(task);
   }
 
+  static Future<void> addReport(String uid, String tId, Report report) {
+    var newReport = getReportCollection(uid, tId).doc();
+    report.id = newReport.id;
+    return newReport.set(report);
+  }
+
   static Future<QuerySnapshot<Task>> getTasks(String uId) {
     return getTaskCollection(uId).get();
   }
 
-  static Stream<QuerySnapshot<Task>> getTasksRealTimeUpdate(
-      String uId, int date) {
+  static Stream<QuerySnapshot<Task>> getTasksRealTimeUpdate(String uId, int date) {
     return getTaskCollection(uId)
         .where("dateTime", isEqualTo: date)
         .snapshots();
+  }
+  static Stream<QuerySnapshot<User>> getUserRealTimeUpdate() {
+    return getUserCollection().snapshots();
+  }
+  static Stream<QuerySnapshot<Report>> getReportRealTimeUpdate(String uid,String tId) {
+    return getReportCollection(uid, tId).snapshots();
   }
 
   static Future<void> deleteTask(String uId, String taskId) {
@@ -62,6 +87,4 @@ class MyDataBase {
       "isDone": isDone,
     });
   }
-
-
 }

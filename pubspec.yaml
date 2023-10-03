@@ -46,6 +46,7 @@ dependencies:
   flutter_slidable: ^3.0.0
   fluttertoast: ^8.2.2
   location: ^5.0.3
+  google_maps_flutter: ^2.5.0
 
 dev_dependencies:
   flutter_test:

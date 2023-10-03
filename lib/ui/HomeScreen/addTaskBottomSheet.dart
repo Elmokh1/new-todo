@@ -6,7 +6,6 @@ import 'package:new_todo/provider/Auth_provider.dart';
 import 'package:new_todo/ui/componant/custom_text_field.dart';
 import 'package:provider/provider.dart';
 
-
 import '../../database/model/task_model.dart';
 import '../../database/my_database.dart';
 
@@ -104,8 +103,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
     );
   }
 
-  void addTask() async{
-
+  void addTask() async {
     if (formKey.currentState?.validate() == false) {
       return;
     }
@@ -114,8 +112,10 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       desc: descriptionController.text,
       title: titleController.text,
     );
-    AuthProvider authProvider = Provider.of<AuthProvider>(context,listen: false);
-    await MyDataBase.addTask(authProvider.currentUser!.id ??"", task);
+
+    appProvider authProvider = Provider.of<appProvider>(context, listen: false);
+    authProvider.updateTask(task);
+    await MyDataBase.addTask(authProvider.currentUser!.id ?? "", task);
     DialogUtils.hideDialog(context);
     Fluttertoast.showToast(
         msg: "Task Add Successfully",
@@ -124,11 +124,11 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
         timeInSecForIosWeb: 1,
         backgroundColor: Colors.green,
         textColor: Colors.white,
-        fontSize: 16.0
-    );
-
+        fontSize: 16.0);
   }
+
   var selectedDate = DateTime.now();
+
   void showTaskDatePicker() async {
     var date = await showDatePicker(
       context: context,

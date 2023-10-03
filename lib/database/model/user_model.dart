@@ -12,11 +12,6 @@ class User {
   User.fromFireStore(Map<String, dynamic>? data)
       : this(id: data?['id'], name: data?['name'], email: data?['email']);
 
-  // {
-  //   id = data['id'];
-  //   name = data['name'];
-  //   email = data['email'];
-  // }
   Map<String, dynamic> toFireStore() {
     return {'id': id, 'name': name, 'email': email};
   }

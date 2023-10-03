@@ -18,9 +18,10 @@ class TaskItem extends StatefulWidget {
 }
 
 class _TaskItemState extends State<TaskItem> {
+
   @override
   Widget build(BuildContext context) {
-    var authProvider = Provider.of<AuthProvider>(context);
+    var authProvider = Provider.of<appProvider>(context);
     var theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -52,9 +53,7 @@ class _TaskItemState extends State<TaskItem> {
                     if (widget.task.isDone == true) {
                       showReportModal();
                     }
-
                   },
-
                   child: Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20.0, vertical: 7.0),
@@ -73,27 +72,47 @@ class _TaskItemState extends State<TaskItem> {
                   child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(
-                    "${widget.task.title}",
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: widget.task.isDone == false
-                          ? theme.primaryColor
-                          : Colors.green,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
+                  widget.task.isDone == false
+                      ? Text(
+                          "${widget.task.title}",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: widget.task.isDone == false
+                                ? theme.primaryColor
+                                : Colors.green,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        )
+                      : Text(
+                          "${widget.task.title}",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: widget.task.isDone == false
+                                ? theme.primaryColor
+                                : Colors.green,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                   const SizedBox(
                     height: 12,
                   ),
-                  Text(
+                  widget.task.isDone == false
+                 ? Text(
                     "${widget.task.desc}",
                     style: const TextStyle(
                       fontSize: 10,
                       color: Colors.black,
                       fontWeight: FontWeight.w300,
                     ),
-                  ),
+                  ) : Text(
+                    "${widget.task.desc}",
+                    style: const TextStyle(
+                      fontSize: 10,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  )
+
                 ],
               )),
               Container(

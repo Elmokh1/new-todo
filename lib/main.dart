@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:new_todo/admin_screen/admin_screen.dart';
+import 'package:new_todo/map/map.dart';
 import 'package:new_todo/provider/Auth_provider.dart';
 import 'package:new_todo/ui/HomeScreen/home_screen.dart';
 import 'package:new_todo/ui/Splash/splash_screen.dart';
@@ -7,6 +9,7 @@ import 'package:new_todo/ui/login/login_screen.dart';
 import 'package:new_todo/ui/register/register_screen.dart';
 import 'package:provider/provider.dart';
 
+import 'admin_screen/user_information.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -16,7 +19,7 @@ void main() async {
   );
   runApp(
     ChangeNotifierProvider(
-      create: (buildcontext) => AuthProvider(),
+      create: (buildcontext) => appProvider(),
       child: MyApp(),
     ),
   );
@@ -28,7 +31,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           textTheme: const TextTheme(
@@ -50,6 +52,8 @@ class MyApp extends StatelessWidget {
         LoginScreen.routeName: (context) => LoginScreen(),
         HomeScreen.routeName: (context) => HomeScreen(),
         Splash.routename: (context) => Splash(),
+        AdminScreen.routeName: (context) => AdminScreen(),
+        MapTRACK.routeName: (context) => MapTRACK(),
       },
     );
   }

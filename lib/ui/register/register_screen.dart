@@ -159,7 +159,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         id: result.user?.uid,
       );
       await MyDataBase.addUser(myUser);
-      var aurthprovider = Provider.of<AuthProvider>(context,listen: false);
+      var aurthprovider = Provider.of<appProvider>(context,listen: false);
       aurthprovider.updateUSer(myUser);
       DialogUtils.hideDialog(context);
       DialogUtils.showMessage(

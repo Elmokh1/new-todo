@@ -20,7 +20,7 @@ class _TodoListState extends State<TodoList> {
 
   @override
   Widget build(BuildContext context) {
-    var authProvider = Provider.of<AuthProvider>(context);
+    var authProvider = Provider.of<appProvider>(context);
     return Column(
       children: [
         Text(
@@ -57,8 +57,7 @@ class _TodoListState extends State<TodoList> {
                   child: CircularProgressIndicator(),
                 );
               }
-              var taskList =
-                  snapshot.data?.docs.map((doc) => doc.data()).toList();
+              var taskList = snapshot.data?.docs.map((doc) => doc.data()).toList();
               if (taskList?.isEmpty == true) {
                 return Center(
                   child: Text(
@@ -87,7 +86,7 @@ class _TodoListState extends State<TodoList> {
               MyDateUtils.dateOnly(selectedDate).millisecondsSinceEpoch,
             ),
           ),
-        )
+        ),
       ],
     );
   }

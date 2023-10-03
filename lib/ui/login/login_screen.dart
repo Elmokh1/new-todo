@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:new_todo/admin_screen/admin_screen.dart';
 import 'package:new_todo/dialog_utils.dart';
 import 'package:new_todo/provider/Auth_provider.dart';
 import 'package:new_todo/ui/componant/custom_text_field.dart';
@@ -20,10 +21,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   var formKey = GlobalKey<FormState>();
   var nameController = TextEditingController(text: "ahmedMokhtar");
-
-  var emailController = TextEditingController(text: "elmokh8433@gmail.com");
-
-  var passwordController = TextEditingController(text: "123456");
+  var emailController = TextEditingController(text: "admin@gmail.com");
+  var passwordController = TextEditingController(text: "agrihawk");
   var passwordConfirmationController = TextEditingController(text: "123456");
 
   @override
@@ -122,6 +121,17 @@ class _LoginScreenState extends State<LoginScreen> {
     if (formKey.currentState?.validate() == false) {
       return;
     }
+    if(emailController.text == "admin@gmail.com" && passwordController.text == "agrihawk"){
+      DialogUtils.showMessage(
+        context,
+        "User Logged in  Successfully",
+        posActionName: "ok",
+        posAction: () {
+          Navigator.pushReplacementNamed(context, AdminScreen.routeName);
+        },
+        dismissible: false,
+      );
+    }
 
     DialogUtils.showLoadingDialog(context, 'Loading...');
     try {
@@ -142,7 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
         },
         dismissible: false,
       );
-      var authProvider = Provider.of<AuthProvider>(context,listen: false);
+      var authProvider = Provider.of<appProvider>(context,listen: false);
       authProvider.updateUSer(user);
 
     } on FirebaseAuthException catch (e) {
