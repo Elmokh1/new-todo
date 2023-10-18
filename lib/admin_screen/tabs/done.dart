@@ -29,7 +29,6 @@ class _NotDoneState extends State<ReportDone> {
 
   @override
   Widget build(BuildContext context) {
-    var authProvider = Provider.of<appProvider>(context);
     return Scaffold(
       body: Column(
         children: [

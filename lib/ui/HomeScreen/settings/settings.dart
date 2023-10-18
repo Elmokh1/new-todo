@@ -8,6 +8,7 @@ import 'package:table_calendar/table_calendar.dart';
 import '../../../MyDateUtils.dart';
 import '../../../database/model/task_model.dart';
 import '../../../database/my_database.dart';
+import '../../../map/map.dart';
 import '../todos_list/task_item.dart';
 
 class Done extends StatefulWidget {
@@ -17,7 +18,6 @@ class Done extends StatefulWidget {
 
 class _DoneState extends State<Done> {
   DateTime selectedDate = DateTime.now();
-
   DateTime focusedDate = DateTime.now();
 
   @override
@@ -76,7 +76,20 @@ class _DoneState extends State<Done> {
                 itemBuilder: (context, index) {
                   final task = taskList![index];
                   if (task.isDone ==true) {
-                    return TaskItem(task: task);
+                    return InkWell(
+                      child: TaskItem(task:task),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MapTRACK(
+                              task: task,
+                              user: authProvider.currentUser,
+                            ),
+                          ),
+                        );
+                      },
+                    );
                   } else {
                     return SizedBox.shrink();
                   }

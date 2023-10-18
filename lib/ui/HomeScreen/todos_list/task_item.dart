@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:new_todo/database/model/task_model.dart';
 import 'package:new_todo/database/my_database.dart';
-import 'package:new_todo/dialog_utils.dart';
 import 'package:new_todo/provider/Auth_provider.dart';
 import 'package:new_todo/ui/HomeScreen/todos_list/report.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +15,6 @@ class TaskItem extends StatefulWidget {
 }
 
 class _TaskItemState extends State<TaskItem> {
-
   @override
   Widget build(BuildContext context) {
     var authProvider = Provider.of<appProvider>(context);
@@ -42,8 +38,9 @@ class _TaskItemState extends State<TaskItem> {
                 child: InkWell(
                   onTap: () {
                     setState(() {
-                      widget.task.isDone = !widget.task.isDone;
-                    });
+                      if (widget.task.isDone == false) {
+                        widget.task.isDone = !widget.task.isDone;
+                      }});
                     MyDataBase.editTask(
                       authProvider.currentUser?.id ?? "",
                       widget.task.id ?? "",
@@ -97,22 +94,22 @@ class _TaskItemState extends State<TaskItem> {
                     height: 12,
                   ),
                   widget.task.isDone == false
-                 ? Text(
-                    "${widget.task.desc}",
-                    style: const TextStyle(
-                      fontSize: 10,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w300,
-                    ),
-                  ) : Text(
-                    "${widget.task.desc}",
-                    style: const TextStyle(
-                      fontSize: 10,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w300,
-                    ),
-                  )
-
+                      ? Text(
+                          "${widget.task.desc}",
+                          style: const TextStyle(
+                            fontSize: 10,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        )
+                      : Text(
+                          "${widget.task.desc}",
+                          style: const TextStyle(
+                            fontSize: 10,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        )
                 ],
               )),
               Container(

@@ -20,10 +20,10 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   var formkey = GlobalKey<FormState>();
-  var nameController = TextEditingController(text: "ahmedMokhtar");
-  var emailController = TextEditingController(text: "elmokh843@gmail.com");
-  var passwordController = TextEditingController(text: "123456");
-  var passwordConfirmationController = TextEditingController(text: "123456");
+  var nameController = TextEditingController();
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
+  var passwordConfirmationController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -151,8 +151,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     DialogUtils.showLoadingDialog(context, 'Loading...');
     try {
-      var result = await authService.createUserWithEmailAndPassword(
-          email: emailController.text, password: passwordController.text);
+
+      var result = await authService.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text);
       var myUser = MyUser.User(
         name: nameController.text,
         email: emailController.text,

@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:new_todo/database/model/report_model.dart';
 import 'package:new_todo/database/model/user_model.dart';
 import 'package:new_todo/database/my_database.dart';
 import 'package:new_todo/provider/Auth_provider.dart';
 import 'package:provider/provider.dart';
-
 import '../database/model/task_model.dart';
 import '../dialog_utils.dart';
 
@@ -71,11 +71,23 @@ class _MapTRACKState extends State<MapTRACK> {
                     color: Colors.white,
                     width: double.infinity,
                     height: 100,
-                    child: Center(
-                      child: Text(
-                        report?[0].report ?? "",
-                        style: TextStyle(fontSize: 15, color: Colors.black),
-                      ),
+                    child: Column(
+                      children: [
+                        Text(
+                          DateFormat('HH:mm:ss')
+                              .format(report?[0].dateTime ?? DateTime.now()),
+                          style: TextStyle(fontSize: 15, color: Colors.black),
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Center(
+                          child: Text(
+                            report?[0].report ?? "",
+                            style: TextStyle(fontSize: 15, color: Colors.black),
+                          ),
+                        ),
+                      ],
                     ),
                   );
                 },
@@ -85,12 +97,13 @@ class _MapTRACKState extends State<MapTRACK> {
                 ),
               )),
           ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  markerSet;
-                });
-              },
-              child: Text("Location")),
+            onPressed: () {
+              setState(() {
+                markerSet;
+              });
+            },
+            child: Text("Location"),
+          ),
           Expanded(
             flex: 3,
             child: GoogleMap(

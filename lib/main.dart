@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:new_todo/admin_screen/admin_screen.dart';
@@ -25,9 +26,32 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  var isLogin = false;
+  var auth = FirebaseAuth.instance;
+  checkIfLogin() async{
+    auth.authStateChanges().listen((User? user) {
+      if(user !=null && mounted)
+        setState(() {
+          isLogin = true;
+          print('isLogin: $isLogin');
+          print('User is logged in');
+        });
+    });
+
+  }
+  @override
+  void initState() {
+    checkIfLogin();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -42,11 +66,10 @@ class MyApp extends StatelessWidget {
               backgroundColor: Colors.transparent,
               elevation: 0,
               centerTitle: true),
-          primarySwatch: Colors.blue,
           scaffoldBackgroundColor: const Color(0xFFDFECDB),
           bottomNavigationBarTheme: const BottomNavigationBarThemeData(
               backgroundColor: Colors.transparent, elevation: 0)),
-      initialRoute: Splash.routename,
+      initialRoute: isLogin? HomeScreen.routeName : Splash.routename,
       routes: {
         RegisterScreen.routeName: (context) => RegisterScreen(),
         LoginScreen.routeName: (context) => LoginScreen(),

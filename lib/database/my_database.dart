@@ -4,7 +4,6 @@ import 'package:new_todo/database/model/report_model.dart';
 import 'model/task_model.dart';
 import 'model/user_model.dart';
 
-
 class MyDataBase {
   static CollectionReference<User> getUserCollection() {
     return FirebaseFirestore.instance
@@ -27,17 +26,17 @@ class MyDataBase {
         );
   }
 
-  static CollectionReference<Report> getReportCollection(String uid, String tId) {
+  static CollectionReference<Report> getReportCollection(
+      String uid, String tId) {
     return getTaskCollection(uid)
         .doc(tId)
         .collection(Report.collectionName)
         .withConverter<Report>(
-      fromFirestore: (snapshot, options) =>
-          Report.fromFireStore(snapshot.data()),
-      toFirestore: (report, options) => report.toFireStore(),
-    );
+          fromFirestore: (snapshot, options) =>
+              Report.fromFireStore(snapshot.data()),
+          toFirestore: (report, options) => report.toFireStore(),
+        );
   }
-
 
   static Future<void> addUser(User user) {
     var collection = getUserCollection();
@@ -66,15 +65,19 @@ class MyDataBase {
     return getTaskCollection(uId).get();
   }
 
-  static Stream<QuerySnapshot<Task>> getTasksRealTimeUpdate(String uId, int date) {
+  static Stream<QuerySnapshot<Task>> getTasksRealTimeUpdate(
+      String uId, int date) {
     return getTaskCollection(uId)
         .where("dateTime", isEqualTo: date)
         .snapshots();
   }
+
   static Stream<QuerySnapshot<User>> getUserRealTimeUpdate() {
     return getUserCollection().snapshots();
   }
-  static Stream<QuerySnapshot<Report>> getReportRealTimeUpdate(String uid,String tId) {
+
+  static Stream<QuerySnapshot<Report>> getReportRealTimeUpdate(
+      String uid, String tId) {
     return getReportCollection(uid, tId).snapshots();
   }
 

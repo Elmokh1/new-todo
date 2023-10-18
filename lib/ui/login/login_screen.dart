@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   var nameController = TextEditingController(text: "ahmedMokhtar");
   var emailController = TextEditingController(text: "admin@gmail.com");
   var passwordController = TextEditingController(text: "agrihawk");
-  var passwordConfirmationController = TextEditingController(text: "123456");
+  var passwordConfirmationController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +121,8 @@ class _LoginScreenState extends State<LoginScreen> {
     if (formKey.currentState?.validate() == false) {
       return;
     }
-    if(emailController.text == "admin@gmail.com" && passwordController.text == "agrihawk"){
+    if (emailController.text == "admin@gmail.com" &&
+        passwordController.text == "agrihawk") {
       DialogUtils.showMessage(
         context,
         "User Logged in  Successfully",
@@ -132,14 +133,14 @@ class _LoginScreenState extends State<LoginScreen> {
         dismissible: false,
       );
     }
-
     DialogUtils.showLoadingDialog(context, 'Loading...');
     try {
       var result = await authService.signInWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
       var user = await MyDataBase.readUser(result.user?.uid ?? "");
-      if (user ==null){
-        DialogUtils.showMessage(context, "Error to ind user in db", posActionName: 'ok');
+      if (user == null) {
+        DialogUtils.showMessage(context, "Error to ind user in db",
+            posActionName: 'ok');
         return;
       }
       DialogUtils.hideDialog(context);
@@ -152,9 +153,8 @@ class _LoginScreenState extends State<LoginScreen> {
         },
         dismissible: false,
       );
-      var authProvider = Provider.of<appProvider>(context,listen: false);
+      var authProvider = Provider.of<appProvider>(context, listen: false);
       authProvider.updateUSer(user);
-
     } on FirebaseAuthException catch (e) {
       DialogUtils.hideDialog(context);
       String errorMessage = 'wrong email or password';

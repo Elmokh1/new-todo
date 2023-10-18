@@ -6,6 +6,7 @@ import 'package:new_todo/provider/Auth_provider.dart';
 import 'package:new_todo/ui/componant/custom_text_field.dart';
 import 'package:provider/provider.dart';
 import 'package:location/location.dart';
+import '../../../MyDateUtils.dart';
 import '../../../database/model/task_model.dart';
 import '../../../database/my_database.dart';
 import '../../../dialog_utils.dart';
@@ -83,7 +84,6 @@ class _ReportModalState extends State<ReportModal> {
                       return ;
                     }
                     addReport();
-                    print("object");
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(left: 40, top: 5),
@@ -114,6 +114,7 @@ class _ReportModalState extends State<ReportModal> {
     );
   }
 
+  var selectedDate = DateTime.now();
 
   void drawUserMarker() async{
   var canGetLocation = await canUseGps ();
@@ -170,6 +171,8 @@ class _ReportModalState extends State<ReportModal> {
       long: locationData.longitude ?? 0.0,
       lat: locationData.latitude ?? 0.0,
       report: ReportController.text,
+      dateTime: selectedDate,
+
     );
     appProvider reportProvider = Provider.of<appProvider>(context, listen: false);
     var taskId = await reportProvider.currentTask?.id;
@@ -177,7 +180,7 @@ class _ReportModalState extends State<ReportModal> {
     print(taskId);
     await MyDataBase.addReport(
       userId ?? "",
-      taskId ?? "",
+      widget.task.id ?? "",
       report,
     );
     DialogUtils.hideDialog(context);
