@@ -36,26 +36,28 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   var isLogin = false;
   var auth = FirebaseAuth.instance;
-  checkIfLogin() async{
+
+  checkIfLogin() async {
     auth.authStateChanges().listen((User? user) {
-      if(user !=null && mounted)
+      if (user != null && mounted)
         setState(() {
           isLogin = true;
           print('isLogin: $isLogin');
           print('User is logged in');
         });
     });
-
   }
+
   @override
   void initState() {
     checkIfLogin();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner:false,
       theme: ThemeData(
           textTheme: const TextTheme(
               headline4: TextStyle(
@@ -69,7 +71,7 @@ class _MyAppState extends State<MyApp> {
           scaffoldBackgroundColor: const Color(0xFFDFECDB),
           bottomNavigationBarTheme: const BottomNavigationBarThemeData(
               backgroundColor: Colors.transparent, elevation: 0)),
-      initialRoute: isLogin? HomeScreen.routeName : Splash.routename,
+      initialRoute: isLogin ? HomeScreen.routeName : Splash.routename,
       routes: {
         RegisterScreen.routeName: (context) => RegisterScreen(),
         LoginScreen.routeName: (context) => LoginScreen(),

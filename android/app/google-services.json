@@ -7,6 +7,42 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:974355530106:android:55dc5e7e4925c81e0e96c3",
+        "android_client_info": {
+          "package_name": "com.example.login"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "974355530106-hkerqgk1681p4f3g2k1dlon08p3ibrb0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIR92FscraE7Qxz9c4LlHflm2Au9aBEp8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "974355530106-hkerqgk1681p4f3g2k1dlon08p3ibrb0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "974355530106-79ejn3q4mdbj0urf69if16h6v42ida61.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.login.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:974355530106:android:2c668ead500ed4190e96c3",
         "android_client_info": {
           "package_name": "com.example.new_todo"
@@ -31,10 +67,10 @@
               "client_type": 3
             },
             {
-              "client_id": "974355530106-8e9e9dfm6i62rtt5ctv4vlcrbc5hltqt.apps.googleusercontent.com",
+              "client_id": "974355530106-79ejn3q4mdbj0urf69if16h6v42ida61.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.newTodo.RunnerTests"
+                "bundle_id": "com.example.login.RunnerTests"
               }
             }
           ]
@@ -67,10 +103,10 @@
               "client_type": 3
             },
             {
-              "client_id": "974355530106-8e9e9dfm6i62rtt5ctv4vlcrbc5hltqt.apps.googleusercontent.com",
+              "client_id": "974355530106-79ejn3q4mdbj0urf69if16h6v42ida61.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.newTodo.RunnerTests"
+                "bundle_id": "com.example.login.RunnerTests"
               }
             }
           ]
