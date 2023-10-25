@@ -29,7 +29,9 @@ class UserItem extends StatelessWidget {
           ),
           width: 100,
           height: 100,
-          child: Center(child: Text(user.name ?? "")),
+          child: Center(
+            child: Text(user.name ?? ""),
+          ),
         ),
       ),
     );

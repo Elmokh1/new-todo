@@ -40,7 +40,8 @@ class _TaskItemState extends State<TaskItem> {
                     setState(() {
                       if (widget.task.isDone == false) {
                         widget.task.isDone = !widget.task.isDone;
-                      }});
+                      }
+                    });
                     MyDataBase.editTask(
                       authProvider.currentUser?.id ?? "",
                       widget.task.id ?? "",

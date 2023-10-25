@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:new_todo/database/model/income_model.dart';
 import 'package:new_todo/database/model/report_model.dart';
 import 'package:new_todo/provider/Auth_provider.dart';
 import 'package:new_todo/ui/componant/custom_text_field.dart';
@@ -26,6 +27,7 @@ class _ReportModalState extends State<ReportModal> {
   var locationManger = Location();
   var formKey = GlobalKey<FormState>();
   TextEditingController ReportController = TextEditingController();
+  TextEditingController IncomeController = TextEditingController(text: "0");
 
   @override
   void initState() {
@@ -61,7 +63,17 @@ class _ReportModalState extends State<ReportModal> {
               height: 10,
             ),
             CustomTextFormField(
-              lines: 10,
+              Label: "التحصيل",
+              controller: IncomeController,
+              validator: (text) {
+                if (text == null || text.trim().isEmpty) {
+                  return 'please enter Report';
+                }
+                return null;
+              },
+            ),
+            CustomTextFormField(
+              lines: 5,
               Label: "Report",
               controller: ReportController,
               validator: (text) {
@@ -81,7 +93,7 @@ class _ReportModalState extends State<ReportModal> {
                 InkWell(
                   onTap: () {
                     if (formKey.currentState?.validate() == false) {
-                      return ;
+                      return;
                     }
                     addReport();
                   },
@@ -116,11 +128,10 @@ class _ReportModalState extends State<ReportModal> {
 
   var selectedDate = DateTime.now();
 
-  void drawUserMarker() async{
-  var canGetLocation = await canUseGps ();
-  if (!canGetLocation) return;
-  var locationData= await locationManger.getLocation();
-
+  void drawUserMarker() async {
+    var canGetLocation = await canUseGps();
+    if (!canGetLocation) return;
+    var locationData = await locationManger.getLocation();
   }
 
   Future<LocationData?> getUserLocation() async {
@@ -165,16 +176,20 @@ class _ReportModalState extends State<ReportModal> {
     }
     return true;
   }
+
   void addReport() async {
+    double Dincome = double.parse(IncomeController.text);
+
     var locationData = await locationManger.getLocation();
     Report report = Report(
       long: locationData.longitude ?? 0.0,
       lat: locationData.latitude ?? 0.0,
       report: ReportController.text,
       dateTime: selectedDate,
-
     );
-    appProvider reportProvider = Provider.of<appProvider>(context, listen: false);
+
+    appProvider reportProvider =
+        Provider.of<appProvider>(context, listen: false);
     var taskId = await reportProvider.currentTask?.id;
     var userId = await reportProvider.currentUser?.id;
     print(taskId);
@@ -182,6 +197,13 @@ class _ReportModalState extends State<ReportModal> {
       userId ?? "",
       widget.task.id ?? "",
       report,
+    );
+    Income income = Income(
+      DailyInCome: Dincome,
+    );
+    await MyDataBase.addIncome(
+      userId ?? "",
+      income,
     );
     DialogUtils.hideDialog(context);
     Fluttertoast.showToast(
@@ -192,9 +214,7 @@ class _ReportModalState extends State<ReportModal> {
         backgroundColor: Colors.green,
         textColor: Colors.white,
         fontSize: 16.0);
-    var authProvider = Provider.of<appProvider>(context,listen: false);
+    var authProvider = Provider.of<appProvider>(context, listen: false);
     authProvider.updateReport(report);
   }
 }
-
-

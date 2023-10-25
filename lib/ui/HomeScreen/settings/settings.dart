@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:new_todo/database/model/target_model.dart';
 import 'package:new_todo/provider/Auth_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../MyDateUtils.dart';
+import '../../../database/model/income_model.dart';
 import '../../../database/model/task_model.dart';
 import '../../../database/my_database.dart';
 import '../../../map/map.dart';
@@ -24,12 +26,15 @@ class _DoneState extends State<Done> {
   Widget build(BuildContext context) {
     var authProvider = Provider.of<appProvider>(context);
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Text(
-          "Welcome Back ${authProvider.currentUser!.name!.toUpperCase()}",
-          style: GoogleFonts.poppins(
-            fontSize: 15,
-            color: Colors.blue,
+        Center(
+          child: Text(
+            "Welcome Back ${authProvider.currentUser!.name!.toUpperCase()}",
+            style: GoogleFonts.poppins(
+              fontSize: 15,
+              color: Colors.blue,
+            ),
           ),
         ),
         TableCalendar(
@@ -48,6 +53,73 @@ class _DoneState extends State<Done> {
             });
           },
         ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            width: double.infinity,
+            color: Colors.white,
+            child: Column(
+              children: [
+                StreamBuilder<QuerySnapshot<Target>>(
+                  builder: (context, targetSnapshot) {
+                    if (targetSnapshot.hasError) {
+                      return Container();
+                    }
+                    if (targetSnapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    var targetList = targetSnapshot.data?.docs.map((doc) => doc.data() as Target).toList();
+                    double totalTarget = 0.0;
+                    if (targetList != null && targetList.isNotEmpty) {
+                      totalTarget = targetList.map((target) => target.DailyTarget ?? 0).reduce((a, b) => a + b);
+                    }
+
+                    return StreamBuilder<QuerySnapshot<Income>>(
+                      builder: (context, incomeSnapshot) {
+                        if (incomeSnapshot.hasError) {
+                          return Container();
+                        }
+                        if (incomeSnapshot.connectionState == ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        var incomeList = incomeSnapshot.data?.docs.map((doc) => doc.data() as Income).toList();
+                        double totalIncome = 0.0;
+                        if (incomeList != null && incomeList.isNotEmpty) {
+                          totalIncome = incomeList.map((income) => income.DailyInCome ?? 0).reduce((a, b) => a + b);
+                        }
+                        double difference = totalTarget - totalIncome;
+                        return Column(
+                          children: [
+                            Text(
+                              'المستهدف: $totalTarget',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            Text(
+                              'التحصيل: $totalIncome',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            Text(
+                              'العجز : $difference',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ],
+                        );
+                      },
+                      stream: MyDataBase.getIncomeRealTimeUpdate(authProvider.currentUser?.id ?? ""),
+                    );
+                  },
+                  stream: MyDataBase.getTargetRealTimeUpdate(authProvider.currentUser?.id ?? ""),
+                ),
+
+              ],
+            ),
+          ),
+        ),
+
         Expanded(
           child: StreamBuilder<QuerySnapshot<Task>>(
             builder: (context, snapshot) {
@@ -75,9 +147,9 @@ class _DoneState extends State<Done> {
               return ListView.builder(
                 itemBuilder: (context, index) {
                   final task = taskList![index];
-                  if (task.isDone ==true) {
+                  if (task.isDone == true) {
                     return InkWell(
-                      child: TaskItem(task:task),
+                      child: TaskItem(task: task),
                       onTap: () {
                         Navigator.push(
                           context,

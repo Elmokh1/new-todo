@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:new_todo/database/model/income_model.dart';
 import 'package:new_todo/database/model/report_model.dart';
+import 'package:new_todo/database/model/target_model.dart';
 
 import 'model/task_model.dart';
 import 'model/user_model.dart';
@@ -23,6 +25,27 @@ class MyDataBase {
           fromFirestore: (snapshot, options) =>
               Task.fromFireStore(snapshot.data()),
           toFirestore: (task, options) => task.toFireStore(),
+        );
+  }
+
+  static CollectionReference<Income> getIncomeCollection(String uid) {
+    return getUserCollection()
+        .doc(uid)
+        .collection(Income.collectionName)
+        .withConverter<Income>(
+          fromFirestore: (snapshot, options) =>
+              Income.fromFireStore(snapshot.data()),
+          toFirestore: (income, options) => income.toFireStore(),
+        );
+  }
+  static CollectionReference<Target> getTargetCollection(String uid) {
+    return getUserCollection()
+        .doc(uid)
+        .collection(Target.collectionName)
+        .withConverter<Target>(
+          fromFirestore: (snapshot, options) =>
+              Target.fromFireStore(snapshot.data()),
+          toFirestore: (target, options) => target.toFireStore(),
         );
   }
 
@@ -55,6 +78,17 @@ class MyDataBase {
     return newTask.set(task);
   }
 
+  static Future<void> addIncome(String uid, Income income) {
+    var newIncome = getIncomeCollection(uid).doc();
+    income.id = newIncome.id;
+    return newIncome.set(income);
+  }
+  static Future<void> addTarget(String uid, Target target) {
+    var newTarget = getTargetCollection(uid).doc();
+    target.id = newTarget.id;
+    return newTarget.set(target);
+  }
+
   static Future<void> addReport(String uid, String tId, Report report) {
     var newReport = getReportCollection(uid, tId).doc();
     report.id = newReport.id;
@@ -70,6 +104,20 @@ class MyDataBase {
     return getTaskCollection(uId)
         .where("dateTime", isEqualTo: date)
         .snapshots();
+  }
+
+  static Stream<QuerySnapshot<Income>> getIncomeRealTimeUpdate(String uId,) {
+    return getIncomeCollection(uId)
+        .snapshots();
+  }
+  static Stream<QuerySnapshot<Target>> getTargetRealTimeUpdate(String uId,) {
+    return getTargetCollection(uId)
+        .snapshots();
+  }
+  static Future<void> editIncome(String Uid, double inCome) {
+    return getIncomeCollection(Uid).doc().update({
+      "DailyInCome": inCome,
+    });
   }
 
   static Stream<QuerySnapshot<User>> getUserRealTimeUpdate() {
@@ -88,6 +136,6 @@ class MyDataBase {
   static Future<void> editTask(String uId, String taskId, bool isDone) {
     return getTaskCollection(uId).doc(taskId).update({
       "isDone": isDone,
-    });
+    },);
   }
 }

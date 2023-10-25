@@ -2,9 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:new_todo/admin_screen/user_item.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:new_todo/database/model/user_model.dart' as MyUser;
-
 import '../database/my_database.dart';
 
 class AdminScreen extends StatefulWidget {
@@ -18,6 +16,7 @@ class _AdminScreenState extends State<AdminScreen> {
   DateTime selectedDate = DateTime.now();
   DateTime focusedDate = DateTime.now();
   MyUser.User? user;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +33,8 @@ class _AdminScreenState extends State<AdminScreen> {
                     child: CircularProgressIndicator(),
                   );
                 }
-                var userList = snapshot.data?.docs.map((doc) => doc.data()).toList();
+                var userList =
+                    snapshot.data?.docs.map((doc) => doc.data()).toList();
                 if (userList?.isEmpty == true) {
                   return Center(
                     child: Text(
@@ -45,11 +45,10 @@ class _AdminScreenState extends State<AdminScreen> {
                     ),
                   );
                 }
-
                 return ListView.builder(
                   itemBuilder: (context, index) {
                     final user = userList![index];
-                    return UserItem(user:user);
+                    return UserItem(user: user);
                   },
                   itemCount: userList?.length ?? 0,
                 );

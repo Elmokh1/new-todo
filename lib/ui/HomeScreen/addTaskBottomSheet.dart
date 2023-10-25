@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:new_todo/MyDateUtils.dart';
+import 'package:new_todo/database/model/target_model.dart';
 import 'package:new_todo/dialog_utils.dart';
 import 'package:new_todo/provider/Auth_provider.dart';
 import 'package:new_todo/ui/componant/custom_text_field.dart';
@@ -17,6 +18,8 @@ class AddTaskBottomSheet extends StatefulWidget {
 class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+  TextEditingController TargetController = TextEditingController(text: "0");
+
   var formKey = GlobalKey<FormState>();
 
   @override
@@ -43,8 +46,21 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 }
               },
             ),
+            const SizedBox(
+              height: 10,
+            ),
             CustomTextFormField(
-              lines: 5,
+              Label: "التحصيل",
+              controller: TargetController,
+              validator: (text) {
+                if (text == null || text.trim().isEmpty) {
+                  return 'please enter Report';
+                }
+                return null;
+              },
+            ),
+            CustomTextFormField(
+              lines: 2,
               Label: 'Notes ',
               controller: descriptionController,
               validator: (text) {
@@ -104,6 +120,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   }
 
   void addTask() async {
+    double DTarget = double.parse(TargetController.text);
+
     if (formKey.currentState?.validate() == false) {
       return;
     }
@@ -116,6 +134,13 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
     appProvider authProvider = Provider.of<appProvider>(context, listen: false);
     authProvider.updateTask(task);
     await MyDataBase.addTask(authProvider.currentUser!.id ?? "", task);
+    Target target = Target(
+      DailyTarget:DTarget,
+    );
+    await MyDataBase.addTarget(
+      authProvider.currentUser?.id ?? "",
+      target,
+    );
     DialogUtils.hideDialog(context);
     Fluttertoast.showToast(
         msg: "Task Add Successfully",
@@ -134,7 +159,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       context: context,
       initialDate: selectedDate,
       firstDate: DateTime.now().subtract(Duration(days: 2)),
-      lastDate: DateTime.now().add(Duration(days: 365),),
+      lastDate: DateTime.now().add(
+        Duration(days: 365),
+      ),
     );
     if (date == null) return;
     setState(() {
