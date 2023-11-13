@@ -1,15 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:new_todo/admin_screen/admin_screen.dart';
-import 'package:new_todo/dialog_utils.dart';
-import 'package:new_todo/provider/Auth_provider.dart';
-import 'package:new_todo/ui/componant/custom_text_field.dart';
-import 'package:new_todo/ui/register/register_screen.dart';
-import 'package:provider/provider.dart';
-import '../../database/my_database.dart';
-import '../../validation_utils.dart';
-import '../HomeScreen/home_screen.dart';
+import 'package:new_todo/import.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String routeName = "Login";
@@ -21,9 +10,10 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   var formKey = GlobalKey<FormState>();
   var nameController = TextEditingController(text: "ahmedMokhtar");
-  var emailController = TextEditingController(text: "youssef@gmail.com");
-  var passwordController = TextEditingController(text: "123456");
-  var passwordConfirmationController = TextEditingController(text: "ahmedMokhtar");
+  var emailController = TextEditingController(text: "");
+  var passwordController = TextEditingController(text: "");
+  var passwordConfirmationController =
+      TextEditingController(text: "ahmedMokhtar");
 
   @override
   Widget build(BuildContext context) {

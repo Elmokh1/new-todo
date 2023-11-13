@@ -1,14 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:new_todo/MyDateUtils.dart';
-import 'package:new_todo/database/model/target_model.dart';
-import 'package:new_todo/dialog_utils.dart';
-import 'package:new_todo/provider/Auth_provider.dart';
-import 'package:new_todo/ui/componant/custom_text_field.dart';
-import 'package:provider/provider.dart';
-
-import '../../database/model/task_model.dart';
-import '../../database/my_database.dart';
+import 'package:new_todo/import.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
   @override
@@ -21,7 +11,13 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   TextEditingController TargetController = TextEditingController(text: "0");
 
   var formKey = GlobalKey<FormState>();
-
+  var auth = FirebaseAuth.instance;
+  User? user;
+  @override
+  void initState() {
+    super.initState();
+    user = auth.currentUser;
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -133,12 +129,14 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
 
     appProvider authProvider = Provider.of<appProvider>(context, listen: false);
     authProvider.updateTask(task);
-    await MyDataBase.addTask(authProvider.currentUser!.id ?? "", task);
+    await MyDataBase.addTask(
+        user?.uid?? "",
+        task);
     Target target = Target(
       DailyTarget:DTarget,
     );
     await MyDataBase.addTarget(
-      authProvider.currentUser?.id ?? "",
+      user?.uid?? "",
       target,
     );
     DialogUtils.hideDialog(context);

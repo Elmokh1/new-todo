@@ -1,16 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:new_todo/database/model/income_model.dart';
-import 'package:new_todo/database/model/report_model.dart';
-import 'package:new_todo/provider/Auth_provider.dart';
-import 'package:new_todo/ui/componant/custom_text_field.dart';
-import 'package:provider/provider.dart';
-import 'package:location/location.dart';
-import '../../../MyDateUtils.dart';
-import '../../../database/model/task_model.dart';
-import '../../../database/my_database.dart';
-import '../../../dialog_utils.dart';
+import 'package:new_todo/import.dart';
 
 class ReportModal extends StatefulWidget {
   Task task;
@@ -28,12 +16,15 @@ class _ReportModalState extends State<ReportModal> {
   var formKey = GlobalKey<FormState>();
   TextEditingController ReportController = TextEditingController();
   TextEditingController IncomeController = TextEditingController(text: "0");
-
+  var auth = FirebaseAuth.instance;
+  User? user;
   @override
   void initState() {
     super.initState();
+    user = auth.currentUser;
     askUserForPermissionAndService();
   }
+
 
   askUserForPermissionAndService() async {
     await requestPermission();
@@ -83,42 +74,37 @@ class _ReportModalState extends State<ReportModal> {
                 return null;
               },
             ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                InkWell(
-                  onTap: () {
-                    if (formKey.currentState?.validate() == false) {
-                      return;
-                    }
-                    addReport();
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 40, top: 5),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      width: 300,
-                      height: 100,
-                      child: Center(
-                        child: Text(
-                          "Add",
-                          style: GoogleFonts.poppins(fontSize: 40),
-                        ),
+
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20.0),
+              child: InkWell(
+                onTap: () {
+                  if (formKey.currentState?.validate() == false) {
+                    return;
+                  }
+                  addReport();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 40, top: 5),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    width: 300,
+                    height: 100,
+                    child: Center(
+                      child: Text(
+                        "Add",
+                        style: GoogleFonts.poppins(fontSize: 40),
                       ),
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: 50,
-                ),
-              ],
+              ),
+            ),
+            SizedBox(
+              width: 50,
             ),
           ],
         ),
@@ -194,7 +180,7 @@ class _ReportModalState extends State<ReportModal> {
     var userId = await reportProvider.currentUser?.id;
     print(taskId);
     await MyDataBase.addReport(
-      userId ?? "",
+      user?.uid ?? "",
       widget.task.id ?? "",
       report,
     );
@@ -202,7 +188,7 @@ class _ReportModalState extends State<ReportModal> {
       DailyInCome: Dincome,
     );
     await MyDataBase.addIncome(
-      userId ?? "",
+      user?.uid ?? "",
       income,
     );
     DialogUtils.hideDialog(context);
@@ -216,5 +202,6 @@ class _ReportModalState extends State<ReportModal> {
         fontSize: 16.0);
     var authProvider = Provider.of<appProvider>(context, listen: false);
     authProvider.updateReport(report);
+
   }
 }

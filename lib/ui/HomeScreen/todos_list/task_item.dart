@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:new_todo/database/model/task_model.dart';
-import 'package:new_todo/database/my_database.dart';
-import 'package:new_todo/provider/Auth_provider.dart';
-import 'package:new_todo/ui/HomeScreen/todos_list/report.dart';
-import 'package:provider/provider.dart';
+import 'package:new_todo/import.dart';
 
 class TaskItem extends StatefulWidget {
   Task task;
@@ -15,6 +10,13 @@ class TaskItem extends StatefulWidget {
 }
 
 class _TaskItemState extends State<TaskItem> {
+  var auth = FirebaseAuth.instance;
+  User? user;
+  @override
+  void initState() {
+    super.initState();
+    user = auth.currentUser;
+  }
   @override
   Widget build(BuildContext context) {
     var authProvider = Provider.of<appProvider>(context);
@@ -43,7 +45,7 @@ class _TaskItemState extends State<TaskItem> {
                       }
                     });
                     MyDataBase.editTask(
-                      authProvider.currentUser?.id ?? "",
+                      user?.uid ?? "",
                       widget.task.id ?? "",
                       widget.task.isDone,
                     );
@@ -128,10 +130,18 @@ class _TaskItemState extends State<TaskItem> {
 
   void showReportModal() {
     showModalBottomSheet(
+      isScrollControlled: true,
       context: context,
       builder: (context) {
-        return ReportModal(
-          task: widget.task,
+        return SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: ReportModal(
+              task: widget.task,
+            ),
+          ),
         );
       },
     );

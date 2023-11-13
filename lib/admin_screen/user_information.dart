@@ -1,13 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:new_todo/admin_screen/admin_screen.dart';
-import 'package:new_todo/admin_screen/tabs/done.dart';
-import 'package:new_todo/admin_screen/tabs/notDone.dart';
-import 'package:new_todo/database/model/task_model.dart';
+
+import 'package:new_todo/import.dart';
 import 'package:new_todo/database/model/user_model.dart' as MyUser;
 
-import '../ui/HomeScreen/settings/settings.dart';
-import '../ui/HomeScreen/todos_list/todos_list.dart';
+
 
 class UserInformation extends StatefulWidget {
 
@@ -39,6 +34,28 @@ class _UserInformationState extends State<UserInformation> {
             color: Colors.black,
           ),
         ),
+        actions: [
+          InkWell(
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SalesScreen(
+                    user: widget.user,
+                  ),
+                ),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 20.0),
+              child: Icon(
+                Icons.add_business_sharp,
+                size: 30,
+                color: Colors.black,
+              ),
+            ),
+          ),
+        ],
       ),
       body: tabs[selectedIndex],
       bottomNavigationBar: BottomAppBar(

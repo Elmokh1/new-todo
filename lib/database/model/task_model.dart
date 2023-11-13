@@ -23,7 +23,7 @@ class Task {
           isDone: date?["isDone"],
         );
 
-  Map<String, dynamic>toFireStore() {
+  Map<String,dynamic>toFireStore() {
     return {
       "id": id,
       "title": title,

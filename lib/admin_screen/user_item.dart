@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:new_todo/admin_screen/user_information.dart';
 import 'package:new_todo/database/model/user_model.dart';
-import 'package:new_todo/provider/Auth_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class UserItem extends StatelessWidget {
-  User user;
+  final User user;
 
   UserItem({required this.user});
 
@@ -21,16 +20,35 @@ class UserItem extends StatelessWidget {
         );
       },
       child: Padding(
-        padding: const EdgeInsets.all(50.0),
+        padding: const EdgeInsets.all(30.0),
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
-            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            gradient: LinearGradient(
+              colors: [Colors.black.withOpacity(.8), Colors.grey], // Use your desired colors
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.3),
+                spreadRadius: 3,
+                blurRadius: 7,
+                offset: Offset(0, 3),
+              ),
+            ],
           ),
-          width: 100,
+          width: double.infinity,
           height: 100,
           child: Center(
-            child: Text(user.name ?? ""),
+            child: Text(
+              user.name ?? "",
+              style: GoogleFonts.acme(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
       ),

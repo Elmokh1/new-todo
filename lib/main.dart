@@ -1,15 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:new_todo/admin_screen/admin_screen.dart';
-import 'package:new_todo/map/map.dart';
-import 'package:new_todo/provider/Auth_provider.dart';
-import 'package:new_todo/ui/HomeScreen/home_screen.dart';
-import 'package:new_todo/ui/Splash/splash_screen.dart';
-import 'package:new_todo/ui/login/login_screen.dart';
-import 'package:new_todo/ui/register/register_screen.dart';
-import 'package:provider/provider.dart';
-import 'firebase_options.dart';
+import 'import.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +8,10 @@ void main() async {
   runApp(
     ChangeNotifierProvider(
       create: (buildcontext) => appProvider(),
-      child: MyApp(),
+      child: BlocProvider(
+        create: (context) => MyCubit(),
+        child: MyApp(),
+      ),
     ),
   );
 }
@@ -33,6 +25,14 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   var auth = FirebaseAuth.instance;
+  User? user;
+
+  @override
+  void initState() {
+    super.initState();
+    user = auth.currentUser;
+    print(user?.uid.toString());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,8 @@ class _MyAppState extends State<MyApp> {
           scaffoldBackgroundColor: const Color(0xFFDFECDB),
           bottomNavigationBarTheme: const BottomNavigationBarThemeData(
               backgroundColor: Colors.transparent, elevation: 0)),
-      initialRoute: Splash.routename,
+      initialRoute: user != null ? HomeScreen.routeName : Splash.routename,
+      // initialRoute: AdminScreen.routeName,
       routes: {
         RegisterScreen.routeName: (context) => RegisterScreen(),
         LoginScreen.routeName: (context) => LoginScreen(),
@@ -59,6 +60,8 @@ class _MyAppState extends State<MyApp> {
         Splash.routename: (context) => Splash(),
         AdminScreen.routeName: (context) => AdminScreen(),
         MapTRACK.routeName: (context) => MapTRACK(),
+        Product.routeName: (context) => Product(),
+        SalesScreen.routeName: (context) => SalesScreen(),
       },
     );
   }

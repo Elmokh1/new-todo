@@ -9,10 +9,7 @@ import '../../database/model/user_model.dart';
 import '../../database/my_database.dart';
 import '../../ui/HomeScreen/todos_list/task_item.dart';
 
-
-
 class NotDone extends StatefulWidget {
-
   User user;
 
   NotDone(this.user);
@@ -24,6 +21,7 @@ class NotDone extends StatefulWidget {
 class _NotDoneState extends State<NotDone> {
   DateTime selectedDate = DateTime.now();
   DateTime focusedDate = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +54,8 @@ class _NotDoneState extends State<NotDone> {
                     child: CircularProgressIndicator(),
                   );
                 }
-                var taskList = snapshot.data?.docs.map((doc) => doc.data()).toList();
+                var taskList =
+                    snapshot.data?.docs.map((doc) => doc.data()).toList();
                 if (taskList?.isEmpty == true) {
                   return Center(
                     child: Text(
@@ -71,8 +70,9 @@ class _NotDoneState extends State<NotDone> {
                 return ListView.builder(
                   itemBuilder: (context, index) {
                     final task = taskList![index];
-                    if (task.isDone ==true) {
-                      return SizedBox.shrink(); // إخفاء العنصر إذا كانت isDone = true
+                    if (task.isDone == true) {
+                      return SizedBox
+                          .shrink(); // إخفاء العنصر إذا كانت isDone = true
                     } else {
                       return TaskItem(task: task);
                     }
@@ -86,7 +86,6 @@ class _NotDoneState extends State<NotDone> {
               ),
             ),
           )
-
         ],
       ),
     );

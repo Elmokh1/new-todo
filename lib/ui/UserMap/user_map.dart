@@ -1,18 +1,20 @@
+
+import 'package:new_todo/database/model/user_model.dart'as MyUser;
 import 'package:new_todo/import.dart';
 import 'package:intl/intl.dart';
 
-class MapTRACK extends StatefulWidget {
+class MapTRACKUser extends StatefulWidget {
   static const String routeName = "Map";
   final Task? task;
-  final User? user;
+  final MyUser.User? user;
 
-  MapTRACK({this.task, this.user});
+  MapTRACKUser({this.task, this.user});
 
   @override
-  State<MapTRACK> createState() => _MapTRACKState();
+  State<MapTRACKUser> createState() => _MapTRACKState();
 }
 
-class _MapTRACKState extends State<MapTRACK> {
+class _MapTRACKState extends State<MapTRACKUser> {
   late CameraPosition Agrihawk;
   late Set<Marker> markerSet = {};
 
@@ -44,7 +46,7 @@ class _MapTRACKState extends State<MapTRACK> {
               child: StreamBuilder<QuerySnapshot<Report>>(
                 builder: (context, snapshot) {
                   var report =
-                      snapshot.data?.docs.map((doc) => doc.data()).toList();
+                  snapshot.data?.docs.map((doc) => doc.data()).toList();
                   double? lat = report?[0].lat;
                   double? long = report?[0].long;
                   print(lat);
@@ -83,7 +85,7 @@ class _MapTRACKState extends State<MapTRACK> {
                   );
                 },
                 stream: MyDataBase.getReportRealTimeUpdate(
-                  widget.user?.uid ?? "",
+                  widget.user?.id ?? "",
                   widget.task?.id ?? "",
                 ),
               )),

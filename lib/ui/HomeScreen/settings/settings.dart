@@ -1,17 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:new_todo/database/model/target_model.dart';
-import 'package:new_todo/provider/Auth_provider.dart';
-import 'package:provider/provider.dart';
-import 'package:table_calendar/table_calendar.dart';
-
-import '../../../MyDateUtils.dart';
-import '../../../database/model/income_model.dart';
-import '../../../database/model/task_model.dart';
-import '../../../database/my_database.dart';
-import '../../../map/map.dart';
-import '../todos_list/task_item.dart';
+import 'package:new_todo/import.dart';
 
 class Done extends StatefulWidget {
   @override
@@ -21,6 +8,14 @@ class Done extends StatefulWidget {
 class _DoneState extends State<Done> {
   DateTime selectedDate = DateTime.now();
   DateTime focusedDate = DateTime.now();
+  var auth = FirebaseAuth.instance;
+  User? user;
+
+  @override
+  void initState() {
+    super.initState();
+    user = auth.currentUser;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +25,7 @@ class _DoneState extends State<Done> {
       children: [
         Center(
           child: Text(
-            "Welcome Back ${authProvider.currentUser!.name!.toUpperCase()}",
+            "Welcome Back }",
             style: GoogleFonts.poppins(
               fontSize: 15,
               color: Colors.blue,
@@ -53,73 +48,92 @@ class _DoneState extends State<Done> {
             });
           },
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            width: double.infinity,
-            color: Colors.white,
-            child: Column(
-              children: [
-                StreamBuilder<QuerySnapshot<Target>>(
-                  builder: (context, targetSnapshot) {
-                    if (targetSnapshot.hasError) {
-                      return Container();
-                    }
-                    if (targetSnapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    var targetList = targetSnapshot.data?.docs.map((doc) => doc.data() as Target).toList();
-                    double totalTarget = 0.0;
-                    if (targetList != null && targetList.isNotEmpty) {
-                      totalTarget = targetList.map((target) => target.DailyTarget ?? 0).reduce((a, b) => a + b);
-                    }
-
-                    return StreamBuilder<QuerySnapshot<Income>>(
-                      builder: (context, incomeSnapshot) {
-                        if (incomeSnapshot.hasError) {
-                          return Container();
-                        }
-                        if (incomeSnapshot.connectionState == ConnectionState.waiting) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                        var incomeList = incomeSnapshot.data?.docs.map((doc) => doc.data() as Income).toList();
-                        double totalIncome = 0.0;
-                        if (incomeList != null && incomeList.isNotEmpty) {
-                          totalIncome = incomeList.map((income) => income.DailyInCome ?? 0).reduce((a, b) => a + b);
-                        }
-                        double difference = totalTarget - totalIncome;
-                        return Column(
-                          children: [
-                            Text(
-                              'المستهدف: $totalTarget',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            Text(
-                              'التحصيل: $totalIncome',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            Text(
-                              'العجز : $difference',
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ],
+        InkWell(
+          onLongPress: () async {
+            setState(() {});
+            await MyDataBase.deleteTarget(user?.uid ?? "");
+            await MyDataBase.deleteIncome(user?.uid ?? "");
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              width: double.infinity,
+              color: Colors.white,
+              child: Column(
+                children: [
+                  StreamBuilder<QuerySnapshot<Target>>(
+                    builder: (context, targetSnapshot) {
+                      if (targetSnapshot.hasError) {
+                        return Container();
+                      }
+                      if (targetSnapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
                         );
-                      },
-                      stream: MyDataBase.getIncomeRealTimeUpdate(authProvider.currentUser?.id ?? ""),
-                    );
-                  },
-                  stream: MyDataBase.getTargetRealTimeUpdate(authProvider.currentUser?.id ?? ""),
-                ),
+                      }
+                      var targetList = targetSnapshot.data?.docs
+                          .map((doc) => doc.data() as Target)
+                          .toList();
+                      double totalTarget = 0.0;
+                      if (targetList != null && targetList.isNotEmpty) {
+                        totalTarget = targetList
+                            .map((target) => target.DailyTarget ?? 0)
+                            .reduce((a, b) => a + b);
+                      }
 
-              ],
+                      return StreamBuilder<QuerySnapshot<Income>>(
+                        builder: (context, incomeSnapshot) {
+                          if (incomeSnapshot.hasError) {
+                            return Container();
+                          }
+                          if (incomeSnapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          var incomeList = incomeSnapshot.data?.docs
+                              .map((doc) => doc.data() as Income)
+                              .toList();
+                          double totalIncome = 0.0;
+                          if (incomeList != null && incomeList.isNotEmpty) {
+                            totalIncome = incomeList
+                                .map((income) => income.DailyInCome ?? 0)
+                                .reduce((a, b) => a + b);
+                          }
+                          double difference = totalTarget - totalIncome;
+                          return Column(
+                            children: [
+                              Text(
+                                'المستهدف: $totalTarget',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              Text(
+                                'التحصيل: $totalIncome',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              Text(
+                                'العجز : $difference',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ],
+                          );
+                        },
+                        stream: MyDataBase.getIncomeRealTimeUpdate(
+                          user?.uid ?? "",
+                        ),
+                      );
+                    },
+                    stream: MyDataBase.getTargetRealTimeUpdate(
+                      user?.uid ?? "",
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-
         Expanded(
           child: StreamBuilder<QuerySnapshot<Task>>(
             builder: (context, snapshot) {
@@ -156,7 +170,7 @@ class _DoneState extends State<Done> {
                           MaterialPageRoute(
                             builder: (context) => MapTRACK(
                               task: task,
-                              user: authProvider.currentUser,
+                              user: user,
                             ),
                           ),
                         );
@@ -170,7 +184,7 @@ class _DoneState extends State<Done> {
               );
             },
             stream: MyDataBase.getTasksRealTimeUpdate(
-              authProvider.currentUser?.id ?? "",
+              user?.uid ?? "",
               MyDateUtils.dateOnly(selectedDate).millisecondsSinceEpoch,
             ),
           ),

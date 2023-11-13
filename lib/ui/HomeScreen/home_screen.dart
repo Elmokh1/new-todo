@@ -1,8 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:new_todo/ui/HomeScreen/addTaskBottomSheet.dart';
-import 'package:new_todo/ui/HomeScreen/settings/settings.dart';
-import 'package:new_todo/ui/HomeScreen/todos_list/todos_list.dart';
-
+import 'package:new_todo/import.dart';
 class HomeScreen extends StatefulWidget {
   static const routeName = "HomeScreen";
 
@@ -17,7 +13,22 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: tabs[selectedIndex],
-      appBar: AppBar(),
+      appBar:AppBar(
+        actions: [
+          InkWell(
+            child: Icon(Icons.logout,color: Colors.black,size: 30,),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+            },
+          ),
+
+        ],
+        leading: InkWell(
+          onTap: (){
+            Navigator.pushReplacementNamed(context, Product.routeName);
+          },
+            child: Icon(Icons.production_quantity_limits_rounded,size: 30,color: Colors.black,)),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         shape: const StadiumBorder(
@@ -52,12 +63,21 @@ class _HomeScreenState extends State<HomeScreen> {
   }
   void showAddTaskSheet() {
     showModalBottomSheet(
+      isScrollControlled: true,
       context: context,
       builder: (context) {
-        return AddTaskBottomSheet();
+        return SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: AddTaskBottomSheet(),
+          ),
+        );
       },
     );
   }
+
   var tabs = [
     TodoList(),
     Done(),

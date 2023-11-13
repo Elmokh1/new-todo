@@ -1,15 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:new_todo/dialog_utils.dart';
-import 'package:new_todo/provider/Auth_provider.dart';
-import 'package:new_todo/ui/HomeScreen/home_screen.dart';
-import 'package:new_todo/ui/componant/custom_text_field.dart';
+import 'package:new_todo/import.dart';
 import 'package:new_todo/database/model/user_model.dart' as MyUser;
-import 'package:new_todo/database/my_database.dart';
-import 'package:new_todo/ui/login/login_screen.dart';
-import 'package:provider/provider.dart';
-import '../../validation_utils.dart';
+
 
 class RegisterScreen extends StatefulWidget {
   static const String routeName = "Register";

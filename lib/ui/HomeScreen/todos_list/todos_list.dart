@@ -1,13 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:new_todo/MyDateUtils.dart';
-import 'package:new_todo/database/model/task_model.dart';
-import 'package:new_todo/database/my_database.dart';
-import 'package:new_todo/provider/Auth_provider.dart';
-import 'package:new_todo/ui/HomeScreen/todos_list/task_item.dart';
-import 'package:provider/provider.dart';
-import 'package:table_calendar/table_calendar.dart';
+import 'package:new_todo/import.dart';
 
 class TodoList extends StatefulWidget {
   @override
@@ -17,14 +8,20 @@ class TodoList extends StatefulWidget {
 class _TodoListState extends State<TodoList> {
   DateTime selectedDate = DateTime.now();
   DateTime focusedDate = DateTime.now();
-
+  var auth = FirebaseAuth.instance;
+  User? user;
+  @override
+  void initState() {
+    super.initState();
+    user = auth.currentUser;
+  }
   @override
   Widget build(BuildContext context) {
     var authProvider = Provider.of<appProvider>(context);
     return Column(
       children: [
         Text(
-          "Welcome Back ${authProvider.currentUser!.name!.toUpperCase()}",
+          "Welcome Back ",
           style: GoogleFonts.poppins(
             fontSize: 15,
             color: Colors.blue,
@@ -82,7 +79,7 @@ class _TodoListState extends State<TodoList> {
               );
             },
             stream: MyDataBase.getTasksRealTimeUpdate(
-              authProvider.currentUser?.id ?? "",
+              user?.uid ?? "",
               MyDateUtils.dateOnly(selectedDate).millisecondsSinceEpoch,
             ),
           ),

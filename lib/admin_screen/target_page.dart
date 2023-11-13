@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 
-
-
-
-
 class TargetScreen extends StatelessWidget {
 
   @override
